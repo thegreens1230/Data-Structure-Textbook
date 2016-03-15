@@ -1,0 +1,37 @@
+package com.test;
+
+import java.util.*;
+
+public class DataStructure6 {
+	public static int M = 5;
+	public static int N = 1;
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		DataStructure6 ds = new DataStructure6();
+		ds.Joseph();
+	}
+	public void Joseph(){
+		LinkedList<Integer> ll = new LinkedList<Integer>();
+//		记数
+		int count = 0;
+		//初始化队列
+		for(int i=0;i<M;i++){
+			ll.add(i+1);
+		}
+		ListIterator li = ll.listIterator();
+		//值全部输出则跳出循环
+		while(!ll.isEmpty()){
+			//一直向后遍历，直到后面没有元素，再讲迭代器的位置调到初始位置
+			count ++;
+			if(!li.hasNext()){
+				li = ll.listIterator(0);
+			}
+			li.next();
+			//每隔N个数取一次结果，但是需要将迭代器前移一位，并将当前结果输出和移除
+			if(count % (N+1) ==0){
+				System.out.println(li.previous());
+				li.remove();
+			}
+		}
+	}
+}
