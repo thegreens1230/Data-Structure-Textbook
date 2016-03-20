@@ -1,0 +1,63 @@
+/**
+ * 计算后缀表达式的值
+ */
+package com.dataStructureTextbook;
+import java.util.*;
+
+public class DS10 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		HouZhui hz = new HouZhui();
+//		for(int i=0;i<9;i++)
+//			System.out.println("135*+6+2-".split("")[]);
+//	}
+		hz.cal("135*+6+2-".split(""));
+	}
+		
+
+}
+class HouZhui{
+	LinkedList<Integer> ll = null;
+	public void cal(String [] s){
+		for(int i=0;i<s.length;i++)
+			System.out.print(s[i]);
+		//用于存储数字的集合
+		ll = new LinkedList<Integer>();
+		for(int i=0;i<s.length;i++){
+			if(this.isNotNumber(s[i])){
+				this.calTwo(s[i]);
+			}else{
+				ll.add(Integer.parseInt(s[i]));
+			}
+		}
+		System.out.println("="+ll.get(0));
+	}
+	//判断是否是数字
+	/**
+	 * 
+	 * @param ss 当前字符
+	 * @return false 是数字 true 不是数字
+	 */
+	public boolean isNotNumber(String ss){
+		return(ss.equals("+") || ss.equals("-") || ss.equals("*") || ss.equals("/"));
+	}
+	/**
+	 * 
+	 * @param ss 当前的运算符号，与集合中后两个数进行运算并将结果存入集合中
+	 */
+	public void calTwo(String ss){
+		int num1 = ll.get(ll.size()-1);
+		ll.remove(ll.size()-1);
+		int num2 = ll.get(ll.size()-1);
+		ll.remove(ll.size()-1);
+		int newNum = 0;
+		switch (ss){
+		case "+": newNum = num2 + num1;break;
+		case "-": newNum = num2 - num1;break;
+		case "*": newNum = num2 * num1;break;
+		case "/": newNum = num2 / num1;break;
+		}
+		ll.add(newNum);
+	}
+}
