@@ -1,0 +1,108 @@
+package com.test;
+
+public class DataStructure7 {
+	public static void main(String [] args){
+		MySingleLinkedList<Integer> link = new MySingleLinkedList<Integer>();
+		Integer[] arr = {1,2,3,4,5,6,7,8};
+		link.addAll(arr);
+		link.add(9);
+		link.containsDelete(5);
+		link.printLink();
+	}
+}
+class MySingleLinkedList<AnyType>{
+	//单链表的变量
+	private Node startMarker;
+	private int size;
+	//内部类，私有
+	private static class Node<AnyType>{
+		AnyType data;
+		Node<AnyType> next;
+		public Node(AnyType x,Node<AnyType> n){
+			data = x;
+			next = n;
+		}
+	}
+	//构造函数中初始化
+	public MySingleLinkedList(){
+		startMarker = new Node<AnyType>(null,null);
+		size = 0;
+	}
+	//增加元素
+	public boolean add(AnyType x){
+		Node<AnyType> p = new Node<AnyType>(x,startMarker);
+		startMarker = p;
+		size ++;
+		return true;
+	}
+	//批量增加元素
+	public boolean addAll(AnyType [] x){
+		for(int i=0;i<x.length;i++){
+			this.add(x[i]);
+			
+		}
+		return true;
+	}
+	//返回大小
+	public int size(){
+		return size;
+	}
+	//打印链表内容
+	public void printLink(){
+		Node<AnyType> p = startMarker;
+		while(p.next != null){
+			System.out.println(p.data);
+			//往后移动一步
+			p = p.next;
+		}
+	}
+	//删除p节点的方法
+	private void delete(Node<AnyType> p_pre,Node<AnyType> p){
+		//
+		p_pre.next = p.next;
+	}
+	//删除含有x的节点的方法，私有，删除的是del.next
+	public void delete(AnyType x){
+		Node<AnyType> p = startMarker;
+		Node<AnyType> p_pre = null;
+		int sizeChange = 0;
+		for(int i=0;i<size;i++){
+			if(p.data == x){
+				//第一个节点没有前节点 TODO
+				//删除p节点
+				this.delete(p_pre,p);
+				sizeChange ++;
+				//若存在删除行为，则pre位置不变
+				p_pre = p_pre;
+			}else{
+				p_pre = p;
+			}
+			p = p.next;
+			
+		}
+		size -= sizeChange;
+		//size的变化必须在遍历结束之后
+		
+	}
+	//是否包含
+	public boolean contains(AnyType x){
+		boolean con = false;
+		Node<AnyType> p = startMarker;
+		while(p.next != null){
+			if(p.data == x){
+				con = true;
+				break;
+			}
+			p = p.next;
+		}
+		return con;
+	}
+	//存在则删除，不存在则添加的方法
+	public void containsDelete(AnyType x){
+		if(this.contains(x)){
+			this.delete(x);
+		}else{
+			this.add(x);
+		}
+	}
+}
