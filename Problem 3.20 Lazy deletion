@@ -1,0 +1,82 @@
+/**
+ * 问题：懒惰删除
+ * 解法：创建新的类，给数据附加一个 boolean值的标记，在链表中加一个懒惰删除的方法
+ */
+package com.dataStructureTextbook;
+import java.util.*;
+public class DS8 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Data<Integer> d = new Data<Integer>(1);
+		MyLinkedList<Data> mll = new MyLinkedList<Data>();
+		mll.add(d);
+		mll.add(new Data<Integer>(2));
+		mll.add(new Data<Integer>(3));
+		mll.add(new Data<Integer>(4));
+		mll.add(new Data<Integer>(5));
+		mll.add(new Data<Integer>(6));
+		mll.add(new Data<Integer>(7));
+		
+		
+		mll.myRemove1(0);
+		mll.myRemove1(1);
+		mll.myRemove1(2);
+		mll.print();
+		mll.myRemove1(3);
+		mll.print();
+
+
+	}
+}
+class Data<AnyType>{
+	//false表示没有remove，true表示remove
+	AnyType data;
+	boolean remove;
+	public Data(AnyType x){
+		data = x;
+		remove = false;
+	}
+}
+/**
+ * 
+ * @author LD
+ *
+ * @param <T> 关于泛型 
+ * 			一旦继承了其他泛型类，<T>中的 T 无论是其他什么类型（如自己定义的Data类），它都被当成了 泛型，而非给定的类型
+ * 			因此，下放 MyLinkedList<Data> extends ...时，get(idx)得到的数据类型是泛型，而非Data型
+ * 			要转换成其他类型，只能使用强转的方式
+ */
+class MyLinkedList<T> extends LinkedList<T>{
+	//记录被删除的次数
+	int countRemove = 0;
+	//第一种remove
+	public void myRemove1(int idx){
+//		this.get(idx).remove = true;
+		Data d = (Data)get(idx);
+		d.remove = true;
+		this.countRemove ++;
+		//如果懒惰删除数超过一半，则将懒惰删除的部分全部删除
+		if(this.countRemove > (this.size()/2)){
+			ListIterator li = this.listIterator();
+			while(li.hasNext()){
+				if(((Data)li.next()).remove){
+					li.remove();
+					this.countRemove --;
+				}
+			}
+		}
+//	}
+//	//第二种remove
+//	public void myRemove2(int idx){
+//		super.remove(idx);
+	}
+	public void print(){
+		ListIterator li = this.listIterator(0);
+		while(li.hasNext()){
+			Data data = (Data)li.next();
+			System.out.print(data.data+" "+data.remove+" ");//
+		}
+		System.out.println("");
+	}
+}
